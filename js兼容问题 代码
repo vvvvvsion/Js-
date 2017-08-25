@@ -1,0 +1,118 @@
+/**
+ * Created by Administrator on 2017/8/25.
+ */
+
+
+
+//事件系列
+//event事件问题
+
+document.onclick=function(ev){//兼容处理；
+    var ev=ev||window.event;
+    var mouseX=ev.clientX;//鼠标事件对象X轴的坐标
+    var mouseY=ev.clientY;//鼠标事件对象Y轴的坐标
+}
+//js阻止事件冒泡，这里使用click事件为例
+document.onclick=function(ev){
+    var ev=ev||window.event;
+    if (ev.stopPropagation) {
+        ev.stopPropagation();//非IE是个方法
+    }else{
+        ev.cancelBubble=true;//IE....有个等号是个属性
+    }
+}
+//js阻止默认事件
+document.onclick=function(e){
+    var e=e||window.event;
+    if (e.preventDefault) {
+        e.preventDefault();//非IE是个是方法
+    }else{
+        e.returnValue='false';//IE是个属性
+    }
+}
+//关于event事件中的target
+document.onmouseover=function(ev){
+    var ev=ev||window.event;
+    var Target=ev.target||ev.srcElement;//获取target的兼容写法，后面的为IE
+    var from=ev.relatedTarget||ev.formElement;//鼠标来的地方，同样后面的为IE...
+    var to=ev.relatedTarget||ev.toElement;//鼠标去的地方
+}
+//鼠标滚轮事件
+//火狐中的滚轮事件
+document.addEventListener("DOMMouseScroll",function(event){
+    alert(event.detail);//火狐中向我们滚来是正数3(有的鼠标可以调节这个数)
+},false)
+//非火狐中的滚轮事件
+document.onmousewheel=function(event){
+    alert(event.detail);//非火狐是向我们滚来是负数-120
+}
+function getClassall(className){
+    //全局类名获取，Classname为你想要查找的类名，不用“.”
+    var tags=document.all?document.all:document.getElementsByTagName('*');
+    var arr=[];
+    for (var i = 0; i < tags.length; i++) {
+        var reg=new RegExp('\\b'+oClass+'\\b','g');
+        if (reg.test(tags[i].className)) {
+            arr.push(tags[i]);
+        }
+    }
+    return arr;
+    //注意返回数组而不是集合，带参数classname的所有元素；
+}
+
+//通过类名局部获取元素
+function getClass(parentID,className){//局部获取类名，parentID为你传入的父级ID
+    var parent=document.getElementById(parentID);
+    var tags=parent.all?parent.all:parent.getElementsByTagName('*');
+    var arr=[];
+    for (var i = 0; i < tags.length; i++) {
+        var reg=new RegExp('\\b'+oClass+'\\b','g');
+        if (reg.test(tags[i].className)) {
+            arr.push(tags[i]);
+        };
+    };
+    return arr;//注意返回的也是数组，包含你传入的class所有元素；
+}
+//获取元素的非行间样式值
+function getStyle(object,cssName) {
+    if (object.currentStyle) {
+        return object.currentStyle[cssName];//IE
+    }else{
+        return getComputedStyle(object,null)[cssName];//除了IE
+    }
+}
+
+//在这里加个元素到浏览器边缘的距离，很实用
+function offsetDistance(obj){//获取元素内容距离浏览器边框的距离（含边框）
+    var ofL=0,ofT=0;
+    while(obj){
+        ofL+=obj.offsetLeft+obj.clientLeft;
+        ofT+=obj.offsetTop+obj.clientTop;
+        obj=obj.offsetParent;
+    }
+    return{left:ofL,top:ofT};
+}
+
+
+/*各种宽高问题
+var screenH=window.screen.height;//屏幕分辨率的高
+var screenW=window.screen.width;//屏幕分辨率的宽
+var screenX=window.screenLeft;//浏览器窗口相对于屏幕的x坐标（除了FireFox）
+var screenFFX=window.screenX;//FireFox相对于屏幕的X坐标
+var screenY=window.screenTop;//浏览器窗口相对于屏幕的y坐标（除了FireFox）
+var screenFFY=window.screenY;//FireFox相对于屏幕的y坐标
+var docW=document.body.clientWidth||document.docuemntElement.clientWidth;//网页可见区域宽
+var docH=document.body.clientHeight||document.docuemntElement.clientHeight;//网页可见区域宽
+//边框clientTop/clientLeft
+
+var docSw=document.body.scrollWidth||document.docuemntElement.scrollWidth;//整个网页的宽
+var docSh=document.body.scrollHeight||document.docuemntElement.scrollHeight;//整个网页的高
+
+var scrollHeight=document.body.scrollTop||document.docuemntElement.scrollTop;//网页被卷去的高
+var scrollLeft=document.body.scrollLeft||document.docuemntElement.scrollLeft;//网页左卷的距离
+
+
+    */
+
+//火狐下特有的节点加载事件
+document.addEventListener('DOMContentLoaded',function ( ){},false);
